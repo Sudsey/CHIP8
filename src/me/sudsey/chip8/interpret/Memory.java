@@ -1,0 +1,58 @@
+package me.sudsey.chip8.interpret;
+
+import java.util.Arrays;
+
+public class Memory {
+
+    private int[] memory;
+
+    public Memory() {
+        this.memory = new int[4096];
+
+        loadDigitSprites();
+    }
+
+
+    private void loadDigitSprites() {
+        int[] digitSprites = new int[] {
+                0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+                0x20, 0x60, 0x20, 0x20, 0x70, // 1
+                0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+                0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+                0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+                0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+                0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+                0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+                0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+                0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+                0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+                0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+                0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+                0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+                0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+                0xF0, 0x80, 0xF0, 0x80, 0x80, // F
+        };
+
+        System.arraycopy(digitSprites, 0, memory, 0, digitSprites.length);
+    }
+
+
+    public void loadROM(int[] rom) {
+        Arrays.fill(memory, 0x200, memory.length, 0);
+        System.arraycopy(rom, 0, memory, 0x200, Math.min(rom.length, 0xFFF - 0x200));
+    }
+
+
+    public int getLocation(int location) {
+        return memory[location];
+    }
+
+    public void setLocation(int location, int value) {
+        memory[location] = value;
+    }
+
+    public int[] getRange(int start, int end) {
+        return Arrays.copyOfRange(memory, start, end);
+    }
+
+}

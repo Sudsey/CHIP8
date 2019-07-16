@@ -1,0 +1,26 @@
+Playability status of the games available at https://www.zophar.net/pdroms/chip8/chip-8-games-pack.html
+Uses compatibility scale listed at https://rpcs3.net/compatibility
+
+Game            Status              Notes
+
+15PUZZLE        Playable
+BLINKY          Nothing             Draws garbage, totally nonfunctional
+BLITZ           Intro               Gets in game and loses immediately
+CONNECT4        Playable
+GUESS           Unknown             Not sure how this game works
+HIDDEN          Playable/Unknown    Seems to work, but I think there should be a delay after you select the second card
+INVADERS        Ingame              Works, but hit detection seems very buggy
+KALEID          Playable/Unknown    Makes kaleidoscope patterns, but needs a lot of button mashing, then goes by itself. Not sure if intended
+MAZE            Playable
+MERLIN          Intro               Nothing happens until 7 is pressed, then you lose
+MISSILE         Ingame              Works OK, hit detection seems buggy, score is always 40
+PONG            Playable
+PONG2           Playable
+PUZZLE          Playable
+SYZYGY          Ingame              Unplayably buggy
+TANK            Playable
+TICTAC          Playable
+UFO             Playable
+VBRIX           Playable            Not sure how this game works but it seems to work ok
+VERS            Ingame              Shows game screen, then the right player autoloses
+WIPEOFF         Ingame              Ball just bounces around on top screen a lot. I don't think it should work this way
