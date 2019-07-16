@@ -31,12 +31,12 @@ public class VirtualDisplay {
             for (int j = 0; j < 8; j++) {
                 int xPos = (xStart + j) % 64;
                 int yPos = (yStart + i) % 32;
+                boolean togglePixel = ((sprite[i] >>> (7 - j)) & 1) == 1;
 
-                if (display[xPos][yPos]) {
+                if (display[xPos][yPos] && togglePixel) {
                     collision = true;
                 }
-
-                display[xPos][yPos] ^= ((sprite[i] >>> (7 - j)) & 1) == 1;
+                display[xPos][yPos] ^= togglePixel;
             }
         }
 
