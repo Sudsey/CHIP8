@@ -9,20 +9,20 @@ BLITZ           Intro               Gets in game and loses immediately
 BRIX            Playable
 CONNECT4        Playable
 GUESS           Unknown             Not sure how this game works
-HIDDEN          Playable/Unknown    Seems to work, but I think there should be a delay after you select the second card
+HIDDEN          Playable
 INVADERS        Ingame              Works, but hit detection seems very buggy
-KALEID          Playable/Unknown    Makes kaleidoscope patterns, but needs a lot of button mashing, then goes by itself. Not sure if intended
+KALEID          Playable
 MAZE            Playable
 MERLIN          Playable
 MISSILE         Playable
 PONG            Playable
 PONG2           Playable
 PUZZLE          Playable
-SYZYGY          Ingame              Unplayably buggy
+SYZYGY          Playable
 TANK            Playable
 TETRIS          Playable
 TICTAC          Playable
 UFO             Playable
 VBRIX           Playable
-VERS            Intro               Not sure how this game works, doesn't seem to work well
+VERS            Playable
 WIPEOFF         Playable

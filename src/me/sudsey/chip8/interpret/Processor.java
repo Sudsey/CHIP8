@@ -47,7 +47,13 @@ public class Processor {
 
         this.stack = new int[16];
 
-        clock = scheduler.scheduleAtFixedRate(() -> {
+        // Ideally we would use scheduleAtFixedRate here, to make instruction blocks regular. However, that method
+        // queues iterations when one is blocked, and so executes blocks in bursts after LD_Vx_K calls. With
+        // scheduleWithFixedDelay, iterations happen e.g. 20ms *after* the previous finishes, so we only run the risk of
+        // slowdown if blocks take too long (at the time of writing, they take ~0.01ms to execute, so this is a
+        // non-issue).
+
+        clock = scheduler.scheduleWithFixedDelay(() -> {
             try {
                 processInstructionBlock();
             } catch (InterruptedException e) {
@@ -58,7 +64,7 @@ public class Processor {
             }
         }, 0, 20, TimeUnit.MILLISECONDS);
 
-        timer = scheduler.scheduleAtFixedRate(() -> {
+        timer = scheduler.scheduleWithFixedDelay(() -> {
             try {
                 if (regDT > 0) {
                     regDT--;
