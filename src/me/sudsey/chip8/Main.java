@@ -1,5 +1,6 @@
 package me.sudsey.chip8;
 
+import me.sudsey.chip8.commons.Options;
 import me.sudsey.chip8.disassemble.Disassembler;
 import me.sudsey.chip8.interpret.Interpreter;
 
@@ -13,8 +14,8 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.err.println("Usage: java -jar " + getExecutableName() + " (run|disassemble) <rom-path>");
+        if (args.length < 2) {
+            System.err.println("Usage: java -jar " + getExecutableName() + " (run|disassemble) <rom-path> [options]");
             return;
         }
 
@@ -26,8 +27,9 @@ public class Main {
             return;
         }
 
+        Options options = Options.parseOptions(args);
         switch (args[0]) {
-            case "run":         Interpreter.run(rom);           break;
+            case "run":         Interpreter.run(rom, options);  break;
             case "disassemble": Disassembler.disassemble(rom);
         }
     }

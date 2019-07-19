@@ -446,6 +446,8 @@ public class Processor {
      * to be erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the
      * coordinates of the display, it wraps around to the opposite side of the screen. See instruction 8xy3 for more
      * information on XOR, and section 2.4, Terminal, for more information on the Chip-8 screen and sprites.
+     *
+     * IMPL. VARIANCE: Some games assume no wrapping occurs. This can be enforced with the `--clip-edges` launch option.
      */
     private void DRW(int x, int y, int n) {
         boolean collision = display.drawSprite(regsVx[x], regsVx[y], memory.getRange(regI, regI + n));

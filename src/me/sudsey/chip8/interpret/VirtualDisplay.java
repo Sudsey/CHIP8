@@ -4,18 +4,16 @@ public class VirtualDisplay {
 
     private Terminal terminal;
 
+    private boolean clipEdges;
+
     private boolean[][] display;
     private boolean displayChanged;
 
-    public VirtualDisplay(Terminal terminal) {
+    public VirtualDisplay(Terminal terminal, boolean clipEdges) {
         this.terminal = terminal;
+        this.clipEdges = clipEdges;
 
         clear();
-    }
-
-
-    public void init() {
-        // Intentionally left blank
     }
 
 
@@ -29,14 +27,19 @@ public class VirtualDisplay {
 
         for (int i = 0; i < sprite.length; i++) {
             for (int j = 0; j < 8; j++) {
-                int xPos = (xStart + j) % 64;
-                int yPos = (yStart + i) % 32;
-                boolean togglePixel = ((sprite[i] >>> (7 - j)) & 1) == 1;
+                int xPos = xStart + j;
+                int yPos = yStart + i;
 
-                if (display[xPos][yPos] && togglePixel) {
+                if (clipEdges && (xPos >= 64 || yPos >= 32)) {
+                    continue;
+                }
+
+                boolean togglePixel = (sprite[i] & (1 << (7 - j))) != 0;
+
+                if (display[xPos % 64][yPos % 32] && togglePixel) {
                     collision = true;
                 }
-                display[xPos][yPos] ^= togglePixel;
+                display[xPos % 64][yPos % 32] ^= togglePixel;
             }
         }
 

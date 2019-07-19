@@ -5,7 +5,7 @@ Game            Status              Notes
 
 15PUZZLE        Playable
 BLINKY          Nothing             Draws garbage, totally nonfunctional
-BLITZ           Intro               Gets in game and loses immediately
+BLITZ           Playable            Requires `--clip-edges` option
 BRIX            Playable
 CONNECT4        Playable
 GUESS           Unknown             Not sure how this game works

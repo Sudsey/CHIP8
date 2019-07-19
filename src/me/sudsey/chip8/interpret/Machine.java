@@ -1,5 +1,7 @@
 package me.sudsey.chip8.interpret;
 
+import me.sudsey.chip8.commons.Options;
+
 public class Machine {
 
     private VirtualDisplay display;
@@ -8,8 +10,8 @@ public class Machine {
 
     private Processor processor;
 
-    public Machine(Terminal terminal) {
-        this.display = new VirtualDisplay(terminal);
+    public Machine(Terminal terminal, Options options) {
+        this.display = new VirtualDisplay(terminal, options.isClipEdges());
         this.keyboard = new VirtualKeyboard(terminal);
         this.memory = new Memory();
 
@@ -18,7 +20,6 @@ public class Machine {
 
 
     public void init() {
-        display.init();
         keyboard.init();
     }
 
