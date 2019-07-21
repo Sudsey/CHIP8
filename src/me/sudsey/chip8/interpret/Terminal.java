@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallbackI;
 import org.lwjgl.opengl.GL;
 
-import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -19,12 +19,12 @@ public class Terminal {
 
     private long window;
 
+    private float[][] display;
     private final boolean[][] displayBuffer;
-    private boolean displayChanged;
 
     public Terminal() {
+        this.display = new float[64][32];
         this.displayBuffer = new boolean[64][32];
-        this.displayChanged = true;
     }
 
 
@@ -37,7 +37,7 @@ public class Terminal {
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-        window = glfwCreateWindow(640, 320, "CHIP8Interp", 0, 0);
+        window = glfwCreateWindow(640, 320, "CHIP8", 0, 0);
         if (window == 0) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
@@ -56,8 +56,8 @@ public class Terminal {
         glBindTexture(GL_TEXTURE_2D, glGenTextures());
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                getBufferFromDisplay(displayBuffer));
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 32, 0, GL_RGBA, GL_FLOAT,
+                getBufferFromDisplay(display));
     }
 
     public void start() {
@@ -66,13 +66,20 @@ public class Terminal {
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if (displayChanged) {
-                synchronized (displayBuffer) {
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 64, 32, GL_RGBA, GL_UNSIGNED_BYTE,
-                            getBufferFromDisplay(displayBuffer));
-                    displayChanged = false;
+            synchronized (displayBuffer) {
+                for (int i = 0; i < 64; i++) {
+                    for (int j = 0; j < 32; j++) {
+                        if (displayBuffer[i][j]) {
+                            display[i][j] = 1.0f;
+                        } else if (display[i][j] > 0.1f) {
+                            display[i][j] -= 0.333333f;
+                        }
+                    }
                 }
             }
+
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 64, 32, GL_RGBA, GL_FLOAT,
+                    getBufferFromDisplay(display));
 
             glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
@@ -103,32 +110,29 @@ public class Terminal {
             for (int i = 0; i < display.length; i++) {
                 System.arraycopy(display[i], 0, displayBuffer[i], 0, display[i].length);
             }
-            displayChanged = true;
         }
     }
 
 
-    private ByteBuffer getBufferFromDisplay(boolean[][] display) {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(64 * 32 * 4);
+    private FloatBuffer getBufferFromDisplay(float[][] display) {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(64 * 32 * 4);
 
         for (int y = 0; y < 32; y++) {
             for (int x = 0; x < 64; x++) {
-                if (display[x][y]) {
-                    buffer.put((byte) 31);
-                    buffer.put((byte) 36);
-                    buffer.put((byte) 10);
-                } else {
-                    buffer.put((byte) 143);
-                    buffer.put((byte) 158);
-                    buffer.put((byte) 102);
-                }
-                buffer.put((byte) 0);
+                buffer.put(0.561f + -0.439f * sqrtLog2(display[x][y] + 1));
+                buffer.put(0.62f + -0.479f * sqrtLog2(display[x][y] + 1));
+                buffer.put(0.4f + -0.361f * sqrtLog2(display[x][y] + 1));
+                buffer.put(0.0f);
             }
         }
 
         buffer.flip();
 
         return buffer;
+    }
+
+    private float sqrtLog2(float x) {
+        return (float) Math.sqrt(Math.log(x) / Math.log(2));
     }
 
 }
