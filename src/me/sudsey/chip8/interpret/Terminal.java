@@ -17,12 +17,14 @@ public class Terminal {
 
     private long window;
 
+    private final boolean[][] pixels;
     private float[][] display;
-    private final boolean[][] displayBuffer;
+    private FloatBuffer textureBuffer;
 
     public Terminal() {
+        this.pixels = new boolean[64][32];
         this.display = new float[64][32];
-        this.displayBuffer = new boolean[64][32];
+        this.textureBuffer = BufferUtils.createFloatBuffer(64 * 32 * 4);
     }
 
 
@@ -54,8 +56,9 @@ public class Terminal {
         glBindTexture(GL_TEXTURE_2D, glGenTextures());
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 32, 0, GL_RGBA, GL_FLOAT,
-                getBufferFromDisplay(display));
+
+        buildBufferFromDisplay();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 32, 0, GL_RGBA, GL_FLOAT, textureBuffer);
     }
 
     public void start() {
@@ -64,10 +67,10 @@ public class Terminal {
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
 
-            synchronized (displayBuffer) {
+            synchronized (pixels) {
                 for (int i = 0; i < 64; i++) {
                     for (int j = 0; j < 32; j++) {
-                        if (displayBuffer[i][j]) {
+                        if (pixels[i][j]) {
                             display[i][j] = 1.0f;
                         } else if (display[i][j] > 0.1f) {
                             display[i][j] -= 0.5f;
@@ -76,8 +79,8 @@ public class Terminal {
                 }
             }
 
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 64, 32, GL_RGBA, GL_FLOAT,
-                    getBufferFromDisplay(display));
+            buildBufferFromDisplay();
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 64, 32, GL_RGBA, GL_FLOAT, textureBuffer);
 
             glBegin(GL_TRIANGLE_STRIP);
             glTexCoord2f(0, 0);
@@ -104,29 +107,27 @@ public class Terminal {
     }
 
     public void setDisplay(boolean[][] display) {
-        synchronized (displayBuffer) {
-            for (int i = 0; i < display.length; i++) {
-                System.arraycopy(display[i], 0, displayBuffer[i], 0, display[i].length);
+        synchronized (pixels) {
+            for (int i = 0; i < 64; i++) {
+                System.arraycopy(display[i], 0, pixels[i], 0, 32);
             }
         }
     }
 
 
-    private FloatBuffer getBufferFromDisplay(float[][] display) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(64 * 32 * 4);
+    private void buildBufferFromDisplay() {
+        textureBuffer.clear();
 
         for (int y = 0; y < 32; y++) {
             for (int x = 0; x < 64; x++) {
-                buffer.put(0.561f + -0.439f * sqrtLog2(display[x][y] + 1));
-                buffer.put(0.62f + -0.479f * sqrtLog2(display[x][y] + 1));
-                buffer.put(0.4f + -0.361f * sqrtLog2(display[x][y] + 1));
-                buffer.put(0.0f);
+                textureBuffer.put(0.561f + -0.439f * sqrtLog2(display[x][y] + 1));
+                textureBuffer.put(0.62f + -0.479f * sqrtLog2(display[x][y] + 1));
+                textureBuffer.put(0.4f + -0.361f * sqrtLog2(display[x][y] + 1));
+                textureBuffer.put(0.0f);
             }
         }
 
-        buffer.flip();
-
-        return buffer;
+        textureBuffer.flip();
     }
 
     private float sqrtLog2(float x) {
