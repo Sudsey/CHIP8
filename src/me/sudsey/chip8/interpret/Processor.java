@@ -354,8 +354,8 @@ public class Processor {
         } else {
             regsVx[0xF] = 0;
         }
-        //regsVx[x] = regsVx[x] >>> 1;
-        regsVx[x] = regsVx[y] >>> 1;
+        regsVx[x] = regsVx[x] >>> 1;
+        //regsVx[x] = regsVx[y] >>> 1;
         //regsVx[y] = regsVx[x];
     }
 
@@ -391,8 +391,8 @@ public class Processor {
         } else {
             regsVx[0xF] = 0;
         }
-        //regsVx[x] = (regsVx[x] << 1) & 0xFF;
-        regsVx[x] = (regsVx[y] << 1) & 0xFF;
+        regsVx[x] = (regsVx[x] << 1) & 0xFF;
+        //regsVx[x] = (regsVx[y] << 1) & 0xFF;
         //regsVx[y] = regsVx[x];
     }
 

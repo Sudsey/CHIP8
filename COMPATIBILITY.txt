@@ -4,13 +4,13 @@ Uses compatibility scale listed at https://rpcs3.net/compatibility
 Game            Status              Notes
 
 15PUZZLE        Playable
-BLINKY          Nothing             Draws garbage, totally nonfunctional
+BLINKY          Playable
 BLITZ           Playable            Requires `--clip-edges` option
 BRIX            Playable
 CONNECT4        Playable
 GUESS           Unknown             Not sure how this game works
 HIDDEN          Playable
-INVADERS        Ingame              Works, but hit detection seems very buggy
+INVADERS        Playable
 KALEID          Playable
 MAZE            Playable
 MERLIN          Playable
@@ -23,6 +23,6 @@ TANK            Playable
 TETRIS          Playable
 TICTAC          Playable
 UFO             Playable
-VBRIX           Playable
+VBRIX           Playable            Buggy, randomly misbehaves. Restarting a few times fixes it
 VERS            Playable
 WIPEOFF         Playable
