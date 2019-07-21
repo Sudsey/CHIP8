@@ -10,9 +10,7 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-// Most of the graphics code in this class is poor and out of date. I'm still trying to work my head around how OpenGL
-// works.
-// In particular, I know the way I draw the quad (with glBegin) is deprecated.
+// Most of the graphics code in this class is pretty poor. I'm still trying to work my head around how OpenGL works.
 // Using synchronised() { } is also really slow I think
 
 public class Terminal {
@@ -72,7 +70,7 @@ public class Terminal {
                         if (displayBuffer[i][j]) {
                             display[i][j] = 1.0f;
                         } else if (display[i][j] > 0.1f) {
-                            display[i][j] -= 0.333333f;
+                            display[i][j] -= 0.5f;
                         }
                     }
                 }
@@ -81,15 +79,15 @@ public class Terminal {
             glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 64, 32, GL_RGBA, GL_FLOAT,
                     getBufferFromDisplay(display));
 
-            glBegin(GL_QUADS);
+            glBegin(GL_TRIANGLE_STRIP);
             glTexCoord2f(0, 0);
             glVertex2f(-1, 1);
             glTexCoord2f(1, 0);
             glVertex2f(1, 1);
-            glTexCoord2f(1, 1);
-            glVertex2f(1, -1);
             glTexCoord2f(0, 1);
             glVertex2f(-1, -1);
+            glTexCoord2f(1, 1);
+            glVertex2f(1, -1);
             glEnd();
 
             glfwSwapBuffers(window);
