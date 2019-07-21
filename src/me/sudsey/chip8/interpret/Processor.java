@@ -2,6 +2,7 @@ package me.sudsey.chip8.interpret;
 
 import me.sudsey.chip8.commons.Instruction;
 import me.sudsey.chip8.commons.Opcode;
+import me.sudsey.chip8.commons.Options;
 
 import java.util.concurrent.*;
 
@@ -15,6 +16,8 @@ public class Processor {
     private VirtualKeyboard keyboard;
     private Memory memory;
 
+    private Options options;
+
     private int[] regsVx;   // 16 8-bit general purpose registers
     private int regI;       // 16-bit memory register
 
@@ -26,12 +29,14 @@ public class Processor {
 
     private int[] stack;    // 16 16-bit values containing memory addresses
 
-    public Processor(VirtualDisplay display, VirtualKeyboard keyboard, Memory memory) {
+    public Processor(VirtualDisplay display, VirtualKeyboard keyboard, Memory memory, Options options) {
         this.scheduler = Executors.newScheduledThreadPool(0);
 
         this.display = display;
         this.keyboard = keyboard;
         this.memory = memory;
+
+        this.options = options;
     }
 
 
@@ -450,7 +455,8 @@ public class Processor {
      * IMPL. VARIANCE: Some games assume no wrapping occurs. This can be enforced with the `--clip-edges` launch option.
      */
     private void DRW(int x, int y, int n) {
-        boolean collision = display.drawSprite(regsVx[x], regsVx[y], memory.getRange(regI, regI + n));
+        boolean collision = display.drawSprite(regsVx[x], regsVx[y], memory.getRange(regI, regI + n),
+                options.isClipEdges());
 
         regsVx[0xF] = collision ? 1 : 0;
     }

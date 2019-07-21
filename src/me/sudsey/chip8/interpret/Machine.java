@@ -11,11 +11,11 @@ public class Machine {
     private Processor processor;
 
     public Machine(Terminal terminal, Options options) {
-        this.display = new VirtualDisplay(terminal, options.isClipEdges());
+        this.display = new VirtualDisplay(terminal);
         this.keyboard = new VirtualKeyboard(terminal);
         this.memory = new Memory();
 
-        this.processor = new Processor(this.display, this.keyboard, this.memory);
+        this.processor = new Processor(this.display, this.keyboard, this.memory, options);
     }
 
 

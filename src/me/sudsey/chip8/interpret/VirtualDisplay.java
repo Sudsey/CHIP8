@@ -4,14 +4,11 @@ public class VirtualDisplay {
 
     private Terminal terminal;
 
-    private boolean clipEdges;
-
     private boolean[][] display;
     private boolean displayChanged;
 
-    public VirtualDisplay(Terminal terminal, boolean clipEdges) {
+    public VirtualDisplay(Terminal terminal) {
         this.terminal = terminal;
-        this.clipEdges = clipEdges;
 
         clear();
     }
@@ -22,7 +19,7 @@ public class VirtualDisplay {
         displayChanged = true;
     }
 
-    public boolean drawSprite(int xStart, int yStart, int[] sprite) {
+    public boolean drawSprite(int xStart, int yStart, int[] sprite, boolean clipEdges) {
         boolean collision = false;
 
         for (int i = 0; i < sprite.length; i++) {
