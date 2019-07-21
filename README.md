@@ -1,5 +1,5 @@
 # CHIP8
- A side-project CHIP8 interpreter and disassembler for Java 11. Built using LWJGL 3.2.2 build 10 (currently installed via zip, with *Minimal OpenGL* preset, may reconfigure using e.g. Maven later).
+ A side-project CHIP8 interpreter and disassembler for Java 11. Built using LWJGL 3.2.2 (managed via Maven).
 
 ## Usage
  This program is run on the command line, and has a GUI only for interacting with the game.
