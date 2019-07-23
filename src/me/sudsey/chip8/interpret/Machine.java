@@ -10,12 +10,12 @@ public class Machine {
 
     private Processor processor;
 
-    public Machine(Terminal terminal, Options options) {
+    public Machine(Options options, Terminal terminal, Speaker speaker) {
         this.display = new VirtualDisplay(terminal);
         this.keyboard = new VirtualKeyboard(terminal);
         this.memory = new Memory();
 
-        this.processor = new Processor(this.display, this.keyboard, this.memory, options);
+        this.processor = new Processor(options, this.display, this.keyboard, speaker, this.memory);
     }
 
 

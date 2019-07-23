@@ -29,7 +29,7 @@ public class Main {
 
         Options options = Options.parseOptions(args);
         switch (args[0]) {
-            case "run":         Interpreter.run(rom, options);  break;
+            case "run":         Interpreter.run(options, rom);  break;
             case "disassemble": Disassembler.disassemble(rom);
         }
     }

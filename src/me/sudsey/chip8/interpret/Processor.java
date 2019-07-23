@@ -12,11 +12,12 @@ public class Processor {
     private Future clock;
     private Future timer;
 
+    private Options options;
+
     private VirtualDisplay display;
     private VirtualKeyboard keyboard;
+    private Speaker speaker;
     private Memory memory;
-
-    private Options options;
 
     private int[] regsVx;   // 16 8-bit general purpose registers
     private int regI;       // 16-bit memory register
@@ -29,14 +30,16 @@ public class Processor {
 
     private int[] stack;    // 16 16-bit values containing memory addresses
 
-    public Processor(VirtualDisplay display, VirtualKeyboard keyboard, Memory memory, Options options) {
+    public Processor(Options options, VirtualDisplay display, VirtualKeyboard keyboard, Speaker speaker,
+                     Memory memory) {
         this.scheduler = Executors.newScheduledThreadPool(0);
+
+        this.options = options;
 
         this.display = display;
         this.keyboard = keyboard;
+        this.speaker = speaker;
         this.memory = memory;
-
-        this.options = options;
     }
 
 
@@ -76,6 +79,10 @@ public class Processor {
                 }
                 if (regST > 0) {
                     regST--;
+
+                    if (regST == 0) {
+                        speaker.stopPlaying();
+                    }
                 }
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -525,6 +532,10 @@ public class Processor {
      */
     private void LD_ST_Vx(int x) {
         regST = regsVx[x];
+
+        if (regST > 0) {
+            speaker.startPlaying();
+        }
     }
 
     /*
