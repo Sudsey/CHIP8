@@ -5,7 +5,6 @@ public class VirtualDisplay {
     private Terminal terminal;
 
     private boolean[][] display;
-    private boolean displayChanged;
 
     public VirtualDisplay(Terminal terminal) {
         this.terminal = terminal;
@@ -16,7 +15,8 @@ public class VirtualDisplay {
 
     public void clear() {
         display = new boolean[64][32];
-        displayChanged = true;
+
+        push();
     }
 
     public boolean drawSprite(int xStart, int yStart, int[] sprite, boolean clipEdges) {
@@ -40,17 +40,13 @@ public class VirtualDisplay {
             }
         }
 
-        displayChanged = true;
-
+        push();
         return collision;
     }
 
 
-    public void push() {
-        if (displayChanged) {
-            terminal.setDisplay(display);
-            displayChanged = false;
-        }
+    private void push() {
+        terminal.setDisplay(display);
     }
 
 }

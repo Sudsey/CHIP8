@@ -1,7 +1,6 @@
 package me.sudsey.chip8.interpret;
 
 import me.sudsey.chip8.commons.Instruction;
-import me.sudsey.chip8.commons.Opcode;
 import me.sudsey.chip8.commons.Options;
 
 import java.util.concurrent.*;
@@ -103,16 +102,11 @@ public class Processor {
             Instruction instruction = Instruction.parseInstructionBytes(instructionBytes);
 
             if (instruction != null) {
-                if (instruction.getOpcode() == Opcode.LD_Vx_K) {
-                    display.push();
-                }
                 processInstruction(instruction);
             }
 
             pc = (pc + 2) & 0xFFFF;
         }
-
-        display.push();
     }
 
     private void processInstruction(Instruction instruction) throws InterruptedException {
