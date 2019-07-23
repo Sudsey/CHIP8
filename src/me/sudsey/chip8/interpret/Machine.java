@@ -26,7 +26,6 @@ public class Machine {
 
     public void start(int[] rom) {
         display.clear();
-        display.push();
         memory.loadROM(rom);
 
         processor.start();
